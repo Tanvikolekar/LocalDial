@@ -11,8 +11,7 @@ const port = process.env.PORT;
 
 // Allow multiple origins for CORS
 app.use(cors({
-  origin: "https://your-frontend.vercel.app",
-  credentials: true
+  origin: "*"
 }));
 
 app.use(express.json()); // To parse incoming JSON requests

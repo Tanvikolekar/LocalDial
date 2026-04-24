@@ -4,6 +4,7 @@ import {
   LOGIN_URL,
   REGISTER_URL,
   RESET_PASSWORD_URL,
+  API_IMAGE_UPLOAD_URL // ✅ ADD THIS
 } from "../endPoint";
 
 // Axios instance with timeout and default headers
@@ -101,9 +102,11 @@ const handleFileUpload = async (file) => {
   formData.append("file", file);
 
   try {
-    const response = await axiosInstance.post(API_IMAGE_UPLOAD_URL, formData);
-    console.log("Uploaded file URL:", response.data.url);
-    return response.data.url; // Use this URL to display the image or save in the database
+    const response = await axiosInstance.post(API_PROUDCT_URL, formData, {
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+}); // Use this URL to display the image or save in the database
   } catch (error) {
     console.error("Error uploading file:", error);
     throw new Error("File upload failed");
@@ -111,24 +114,22 @@ const handleFileUpload = async (file) => {
 };
 
 export const fetchBusinessesByCategory = async (category) => {
-  const url = `http://localhost:4000/api/businesses/category/${category}`;
-  console.log("Fetching businesses from:", url); // Debugging output
+  const url = `${API_PROUDCT_URL}/category/${category}`; // ✅ FIXED
+
+  console.log("Fetching businesses from:", url);
 
   try {
-    const response = await fetch(url, {
-      headers: { Accept: "application/json" },
-    });
-    const data = await response.json();
-    console.log("Fetched Businesses:", data);
-    return data;
+    const response = await axiosInstance.get(url); // ✅ use axios
+    return response.data.businesses || response.data;
   } catch (error) {
     console.error("Error fetching businesses:", error);
-    throw new Error("Failed to fetch businesses. Check backend logs.");
+    throw new Error("Failed to fetch businesses.");
   }
 };
+
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token"); // ✅ correct
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

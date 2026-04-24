@@ -1,6 +1,7 @@
 // src/api/endPoint.js
 
-export const API_BASE_URL = `http://localhost:4000/api/user`; // Your backend URL
+// ✅ Base URL (Render backend)
+export const API_BASE_URL = `https://localdial-backend.onrender.com/api/user`;
 
 // Registration Endpoint
 export const REGISTER_URL = `${API_BASE_URL}/register`;
@@ -12,7 +13,8 @@ export const LOGIN_URL = `${API_BASE_URL}/login`;
 export const RESET_PASSWORD_URL = `${API_BASE_URL}/resetpassword`;
 
 
-export const API_PROUDCT_URL = `http://localhost:4000/api/businesses`;
+// ✅ Business APIs
+export const API_PROUDCT_URL = `https://localdial-backend.onrender.com/api/businesses`;
 
-export const API_IMAGE_UPLOAD_URL =`http://localhost:4000/api/img/upload`;
-
+// ✅ Image Upload API
+export const API_IMAGE_UPLOAD_URL = `https://localdial-backend.onrender.com/api/img/upload`;
