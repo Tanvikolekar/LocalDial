@@ -20,16 +20,17 @@ const getAllBusinesses = async (req, res) => {
 //get businesses by category
 const getBusinessesByCategory = async (req, res) => {
   try {
-    const { category } = req.params; // Get category from URL parameter
-    const businesses = await Business.find({ category });
+    const category = req.params.category;
 
-    if (businesses.length === 0) {
-      return res.status(404).json({ success: false, message: "No businesses found for this category" });
-    }
+    const businesses = await Business.find({
+     category: { $regex: category.trim(), $options: "i" }
+    });
+
+    console.log("Found businesses:", businesses); // debug
 
     res.status(200).json({ success: true, businesses });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server error while fetching businesses" });
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
@@ -126,7 +127,7 @@ const deleteBusiness = async (req, res) => {
 
 module.exports = {
   getAllBusinesses,
- getBusinessesByCategory,
+  getBusinessesByCategory,
   getBusinessById,
   createBusiness,
   updateBusiness,

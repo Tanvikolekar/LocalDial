@@ -12,6 +12,8 @@ import ResetPassword from "./components/pages/ResetPassword";
 import Services from "./components/pages/Services";
 import BusinessCard from "./components/layout/BusinessCard";
 import BusinessList from "./components/pages/BusinessList";
+import CategoryPage from "./components/pages/CategoryPage";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 
 const App = () => {
@@ -29,12 +31,13 @@ const App = () => {
         <main className="flex-grow">
           <Routes>
             <Route path="/home" element={<HomePage />} />
+            <Route path="/category/:category" element={<CategoryPage />} />
             <Route path="/aboutus" element={<AboutUs />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/resetPassword" element={<ResetPassword />} />
             <Route path="/categories" element={<Categories />} />
-            <Route path="/addform" element={<AddBusinessForm />} />
+            <Route path="/addform"element={<ProtectedRoute> <AddBusinessForm /></ProtectedRoute>}/>
             <Route path="/businesscard" element={<BusinessCard/>} />
             <Route path="/services" element={<Services />} />
             <Route path="/" element={<Navigate to="/home" />} />

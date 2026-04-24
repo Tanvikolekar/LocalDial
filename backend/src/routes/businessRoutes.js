@@ -12,6 +12,7 @@ const router = express.Router();
 
 // Routes for Business
 router.get('/', getAllBusinesses);
+router.get("/category/:category", getBusinessesByCategory); // Get businesses by category
 router.get('/:id', getBusinessById);
 router.post('/', createBusiness);
 router.put('/:id', updateBusiness);

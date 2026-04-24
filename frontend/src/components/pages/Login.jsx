@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { loginUser } from "../apiCalls";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   // State hooks for form data
@@ -9,33 +11,41 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   // Handle form submission
+
+  const navigate = useNavigate();
+  const location = useLocation();
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!email || !password) {
-      setError("All fields are required.");
-      return;
+  if (!email || !password) {
+    setError("All fields are required.");
+    return;
+  }
+
+  try {
+    setLoading(true);
+    setError("");
+
+    const response = await loginUser({ email, password });
+
+    if (response.success) {
+      // ✅ SAVE LOGIN
+     localStorage.setItem("token", response.token);
+      localStorage.setItem("user", JSON.stringify(response.user || {}));
+
+      // 🔁 REDIRECT BACK
+      const from = location.state?.from?.pathname || "/";
+      navigate(from);
+
+    } else {
+      setError(response.message || "Invalid credentials.");
     }
-
-    try {
-      setLoading(true);
-      setError("");
-
-      const response = await loginUser({ email, password }); // API call to login user
-
-      if (response.success) {
-        alert("Login successful!");
-        // Redirect to dashboard or another page
-        // window.location.href = '/dashboard'; // Example redirect
-      } else {
-        setError(response.message || "Invalid credentials.");
-      }
-    } catch (err) {
-      setError("Error during login. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  } catch (err) {
+    setError("Error during login. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-white">
@@ -86,24 +96,23 @@ const Login = () => {
 
         {/* Forgot Password Link */}
         <div className="mt-4 text-center">
-          <a
-            href="/resetPassword"
-            className="text-orange-500 hover:underline transition duration-300"
-          >
-            Reset Password
-          </a>
-        </div>
+  <Link
+    to="/resetPassword"
+    className="text-orange-500 hover:underline transition duration-300"
+  >
+    Reset Password
+  </Link>
+</div>
 
-        {/* Register Redirect */}
-        <p className="mt-6 text-center text-sm text-gray-600">
-          Don’t have an account?{" "}
-          <a
-            href="/register"
-            className="text-orange-500 hover:underline transition duration-300"
-          >
-            Sign up
-          </a>
-        </p>
+<p className="mt-6 text-center text-sm text-gray-600">
+  Don’t have an account?{" "}
+  <Link
+    to="/register"
+    className="text-orange-500 hover:underline transition duration-300"
+  >
+    Sign up
+  </Link>
+</p>
       </div>
     </div>
   );

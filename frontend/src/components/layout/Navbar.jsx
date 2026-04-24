@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"; // Import Link for navigation
 
 const Navbar = ({ onCategoryChange, onFilter }) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchQuery, setSearchQuery] = useState("");
+  const isLoggedIn = localStorage.getItem("token");
 
   const handleCategoryChange = (event) => {
     const category = event.target.value;
@@ -16,13 +16,6 @@ const Navbar = ({ onCategoryChange, onFilter }) => {
     }
   };
 
-  const handleSearch = () => {
-    if (onFilter) {
-      onFilter({ searchQuery, selectedCategory }); // Call only if the function is provided
-    } else {
-      console.warn("onFilter is not provided as a prop.");
-    }
-  };
 
   return (
     <nav className="bg-orange-700 text-orange-100 shadow-lg">
@@ -34,22 +27,6 @@ const Navbar = ({ onCategoryChange, onFilter }) => {
 
         {/* Spacer for separation */}
         <div className="flex-grow"></div> {/* Ensures spacing between Logo and Search Bar */}
-
-        <div className="flex items-center space-x-4"> {/* Increased space between search bar and links */}
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="px-4 py-2 w-80 md:w-96 border border-orange-400 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-          />
-          <button
-            className="bg-orange-500 text-white px-4 py-2 rounded-r-lg hover:bg-orange-600 transition duration-300"
-            onClick={handleSearch}
-          >
-            Search
-          </button>
-        </div>
 
         {/* Spacer between search-bar and Navigation Links */}
         <div className="ml-6"></div> {/* Add a margin for spacing */}
@@ -74,12 +51,21 @@ const Navbar = ({ onCategoryChange, onFilter }) => {
           >
             Services
           </Link>
-          <Link
-            to="/addform"
-            className="hover:text-orange-200 transition duration-300 no-underline"
-          >
-            AddYourServices
-          </Link>
+          {isLoggedIn ? (
+  <Link
+    to="/addform"
+    className="hover:text-orange-200 transition duration-300 no-underline"
+  >
+    AddYourBusiness
+  </Link>
+) : (
+  <Link
+    to="/login"
+    className="hover:text-orange-200 transition duration-300 no-underline"
+  >
+    AddYourBusiness
+  </Link>
+)}
         </div>
 
         {/* Sign Up Button */}
